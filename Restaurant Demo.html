@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Restaurant Demo</title>
+  <style>
+    body { font-family: sans-serif; margin:0; padding:0; }
+    header, section, footer { padding:20px; max-width:1000px; margin:auto; }
+    .menu-filter { margin-bottom:10px; }
+    .menu-item { display:none; padding:10px; border:1px solid #ccc; margin-bottom:8px; border-radius:4px; }
+    .menu-item.visible { display:block; }
+    .menu-item .price { float:right; font-weight:bold; }
+    .gallery { display:grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:20px; }
+    .gallery img { width:100%; border-radius:8px; }
+    form { display:flex; flex-wrap:wrap; gap:10px; max-width:400px; }
+    form input, form select, form textarea { width:100%; padding:8px; border:1px solid #666; border-radius:4px; }
+    form button { padding:10px; background:#28a; color:#fff; border:none; border-radius:4px; cursor:pointer; }
+    #status { margin-top:10px; font-weight:bold; }
+    footer { text-align:center; background:#f3f3f3; margin-top:40px; }
+    footer a { margin:0 8px; text-decoration:none; color:#333; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Our Menu</h1>
+  <div class="menu-filter">
+    <label><input type="checkbox" value="veg"> Vegetarian</label>
+    <label><input type="checkbox" value="nonveg"> Non‑Vegetarian</label>
+  </div>
+  <div id="menu">
+    <div class="menu-item veg visible">
+      <span class="name">Paneer Tikka</span>
+      <span class="price">₹250</span>
+      <p>Grilled paneer cubes with spices.</p>
+    </div>
+    <div class="menu-item nonveg visible">
+      <span class="name">Chicken Tikka</span>
+      <span class="price">₹300</span>
+      <p>Succulent chicken skewers marinated in tandoori spices.</p>
+    </div>
+    <div class="menu-item veg visible">
+      <span class="name">Veg Biryani</span>
+      <span class="price">₹200</span>
+      <p>Aromatic rice with mixed vegetables and saffron.</p>
+    </div>
+    <div class="menu-item nonveg visible">
+      <span class="name">Fish Curry</span>
+      <span class="price">₹350</span>
+      <p>Spicy coastal-style fish curry with coconut base.</p>
+    </div>
+  </div>
+</header>
+
+<section>
+  <h2>Gallery</h2>
+  <div class="gallery">
+    <img src="https://via.placeholder.com/300x200?text=Paneer+Tikka" alt="Paneer Tikka">
+    <img src="https://via.placeholder.com/300x200?text=Restaurant+Interior+1" alt="Dining ambiance">
+    <img src="https://via.placeholder.com/300x200?text=Chicken+Tikka" alt="Chicken Tikka">
+    <img src="https://via.placeholder.com/300x200?text=Restaurant+Interior+2" alt="Restaurant interior">
+    <img src="https://via.placeholder.com/300x200?text=Veg+Biryani" alt="Veg Biryani">
+    <img src="https://via.placeholder.com/300x200?text=Fish+Curry" alt="Fish Curry">
+  </div>
+</section>
+
+<section>
+  <h2>Reserve a Table</h2>
+  <form id="booking">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Email">
+    <input type="tel" name="phone" placeholder="Phone" required>
+    <input type="date" name="date" required>
+    <input type="time" name="time" required>
+    <input type="number" name="party" min="1" placeholder="Number of guests" required>
+    <textarea name="message" rows="2" placeholder="Special requests (optional)"></textarea>
+    <button type="submit">Book Now</button>
+  </form>
+  <div id="status"></div>
+</section>
+
+<footer>
+  <p>Follow us:</p>
+  <a href="#" target="_blank">Instagram</a>
+  <a href="#" target="_blank">Facebook</a>
+  <a href="#" target="_blank">X (Twitter)</a>
+</footer>
+
+<script>
+  // Filter menu by category
+  document.querySelectorAll('.menu-filter input').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const active = Array.from(document.querySelectorAll('.menu-filter input:checked')).map(i => i.value);
+      document.querySelectorAll('.menu-item').forEach(item => {
+        item.classList.toggle('visible', active.length === 0 || active.includes(item.classList[1]));
+      });
+    });
+  });
+
+  // Simple reservation form handler
+  document.getElementById('booking').addEventListener('submit', e => {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+    const details = {};
+    data.forEach((v,k)=>details[k]=v);
+    document.getElementById('status').textContent =
+      `✅ Thanks ${details.name}! Reserved table for ${details.party} on ${details.date} at ${details.time}.`;
+    form.reset();
+  });
+</script>
+
+</body>
+</html>
